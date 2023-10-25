@@ -2,7 +2,7 @@
 
 This project produces place notation for bellringing methods in highly accessible JSON and CSV formats.
 
-It works by downloading and processing XML methods data from the [Tony Smith's website](http://www.methods.org.uk).
+It works by downloading and processing XML methods data from [Tony Smith's website](http://www.methods.org.uk).
 
 The generated CSV and JSON files are divided into stages:
 
