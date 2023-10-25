@@ -28,7 +28,7 @@ Note that the script only downloads a copy of the methods XML from the webserver
 
 # What do you mean by "Libre"?
 
-In this case, it doesn't mean "free" as in money; it means "free" as in "convenient to download in a few universal and common formats, and usable immediately for whatever project you had in mind".
+In this case, it doesn't mean "free" as in money; it means "free" as in "convenient to download place notation in a few universal and common formats, and usable immediately for whatever project you had in mind".
 
 # Motivation
 
