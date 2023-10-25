@@ -4,6 +4,15 @@ This project produces place notation for bellringing methods in highly accessibl
 
 It works by downloading and processing XML methods data from the [Tony Smith's website](http://www.methods.org.uk).
 
+The generated CSV and JSON files are divided into stages, but there are also 'all' versions genereated that contain the data for every stage in a single file.
+
+There are also `simple` variants of the files: these have only four bits of information in each row:
+
+* method name
+* method title
+* stage
+* place notation
+
 # I just want the data!
 
 To get a copy of the data (generated 2023-10-25), please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
