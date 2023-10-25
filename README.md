@@ -14,7 +14,7 @@ stage-05.json
 ...
 ```
 
-There is also an 'all' file generated that contain the data for every stage in a single file.
+There is also an 'all' file generated that contain the data for every stage in a single file: `stage-all.csv` and `stage-all.json`.
 
 If there is too much information in the standard JSON/CSV files, have a look at the "simple" variants:
 
@@ -32,6 +32,8 @@ These files have a minimal four bits of information for each method:
 * method title
 * stage
 * place notation
+
+Please note that the script filters out all false methods. If you'd like to keep those, please see the comment in `process.sh` on how to do that.
 
 # I just want the data!
 
