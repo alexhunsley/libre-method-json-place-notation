@@ -26,7 +26,7 @@ simple-stage-05.json
 ...
 ```
 
-These files have a minimal four bits of information for each method:
+These variants have only four bits of information for each method:
 
 * method name
 * method title
