@@ -69,5 +69,4 @@ The XML data from [Tony Smith's website](http://www.methods.org.uk) is very deta
 
 Sometimes all you want is a very flat source of data that lets you get on with your main task (even if that involves some repetition in the data).
 
-That's what Libre Method aims to provide: flat structures (basically lists) of CSV and JSON method data, which includes well formed method names and place notation.
-
+That's what Libre Method aims to provide: very simple flat structures (basically lists) of CSV and JSON method data.
