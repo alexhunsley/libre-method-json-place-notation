@@ -26,7 +26,7 @@ simple-stage-05.json
 ...
 ```
 
-These variants have only four bits of information for each method:
+These variants have only four bits of information per method:
 
 * method name
 * method title
