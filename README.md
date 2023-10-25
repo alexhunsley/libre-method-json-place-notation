@@ -8,6 +8,24 @@ It works by downloading and processing XML methods data from the [Tony Smith's w
 
 If you just want a copy of the data generated (2023-10-25), please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
 
+# How to run the script
+
+You will need:
+
+* Bash
+* Python3 and the `xmltodict` lib
+* `jq` (easily installed with e.g. homebrew: `brew install jq`)
+
+To run the script: 
+
+```
+> cd code/
+> chmod u+x process.sh
+> ./process.sh
+```
+
+Note that the script only downloads a copy of the methods XML from the webserver when it needs to: if the XML on the webserver hasn't changed since the last download, it isn't downloaded again.
+
 # What do you mean by "Libre"?
 
 In this case, it doesn't mean "free" as in money; it means "free" as in "convenient to download in a few universal and common formats, and usable immediately for whatever project you had in mind".
