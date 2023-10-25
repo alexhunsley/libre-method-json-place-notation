@@ -4,9 +4,29 @@ This project produces place notation for bellringing methods in highly accessibl
 
 It works by downloading and processing XML methods data from the [Tony Smith's website](http://www.methods.org.uk).
 
-The generated CSV and JSON files are divided into stages, but there are also 'all' versions genereated that contain the data for every stage in a single file.
+The generated CSV and JSON files are divided into stages:
 
-There are also `simple` variants of the files: these have only four bits of information in each row:
+```
+stage-04.csv
+stage-04.json
+stage-05.csv
+stage-05.json
+...
+```
+
+There is also an 'all' file generated that contain the data for every stage in a single file.
+
+If there is too much information in the standard JSON/CSV files, have a look at the "simple" variants:
+
+```
+simple-stage-04.csv
+simple-stage-04.json
+simple-stage-05.csv
+simple-stage-05.json
+...
+```
+
+These files have a minimal four bits of information for each method:
 
 * method name
 * method title
