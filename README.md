@@ -6,7 +6,11 @@ It works by downloading and processing XML methods data from the [Tony Smith's w
 
 # I just want the data!
 
-If you just want a copy of the data generated (2023-10-25), please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump)
+If you just want a copy of the data generated (2023-10-25), please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
+
+# What do you mean by "Libre"?
+
+In this case, it doesn't mean "free" as in money; it means "free" as in "convenient to download in a few universal, well-used formats, and usable immediately for whatever project you had in mind".
 
 # Motivation
 
