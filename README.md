@@ -14,7 +14,7 @@ stage-05.json
 ...
 ```
 
-There is also an 'all' file generated that contain the data for every stage in a single file: `stage-all.csv` and `stage-all.json`.
+There is also an 'all' file generated that contains the data for every stage in a single file: `stage-all.csv` and `stage-all.json`.
 
 If there is too much information in the standard JSON/CSV files for your liking, have a look at the "simple" variants:
 
