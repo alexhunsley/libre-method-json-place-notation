@@ -61,7 +61,7 @@ Note that the script only downloads a copy of the methods XML from the webserver
 
 # Versioning
 
-This project uses semantic versioning (x.y.z). That way, if the major version changes (e.g. 1.3.2 -> 2.0.0), you know it the changes might break any script you have that uses the older version of the data.
+This project uses [semantic versioning](https://semver.org) (x.y.z). That way, if the major version changes (e.g. 1.3.2 -> 2.0.0), you know it the changes might break any script you have that uses the older version of the data.
 
 Minor (y) and patch (z) version changes should not break anything you are doing with the data.
 
