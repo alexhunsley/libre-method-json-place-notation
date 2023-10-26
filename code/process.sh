@@ -2,10 +2,12 @@
 
 #
 # Libre Method by Alex Hunsley 2023
+# https://github.com/alexhunsley/libre-method-json-place-notation
 #
 
 URL="http://www.methods.org.uk/method-collections/xml-zip-files/allmeths-xml.zip"
 OUTPUT_FILE="allmeths-xml.zip"
+UNZIPPED_FILE="allmeths.xml"
 
 # curl -z flag doesn't re-download it if the local file has same date as server file
 HTTP_STATUS=$(curl -z "$OUTPUT_FILE" -O -w "%{http_code}" "$URL")
@@ -15,34 +17,67 @@ generated_data_dir="generated_data"
 methods_processed="methods_processed.json"
 methods_processed_non_false="methods_processed_non_false.json"
 
-# uncomment this line to force processing even if the xml zip hasn't changed omn webserver
-# force_processing_even_if_xml_unchanged=y
+# uncomment this line to force processing even if the xml zip hasn't changed on webserver
+force_processing_even_if_xml_unchanged=y
 
-# is there newer data on the website?
-if  [ ! "$force_processing_even_if_xml_unchanged" ] && [ "$HTTP_STATUS" == "304" ]; then
+#
+# Note that enabling flag this will assume the unzipped version of the file is still on disk
+# and not do any unzipping!
 
-    echo
-    echo
-    echo "${OUTPUT_FILE} was not modified on the server since the last download, so I'm stopping."
-    echo
-    echo
-    exit 0
+# do we already have the latest zip?
+if [ "$HTTP_STATUS" == "304" ]; then
+	
+	# don't exit early if we want to forcing re-processing
+	if [ ! "$force_processing_even_if_xml_unchanged" ]; then
+	    echo
+	    echo
+	    echo "${OUTPUT_FILE} was not modified on the server since the last download, so I'm stopping."
+	    echo
+	    echo "If you want to force processing again regardless, please uncomment this line in the script:"
+	    echo 
+	    echo "    # force_processing_even_if_xml_unchanged=y"
+	    echo
+	    echo "(Doing so will not re-download the XML zip file unless you first delete allmeths-xml.zip locally.)"
+	    echo
+	    echo
+	    exit 0
+	else
+	    echo
+	    echo
+	    echo "${OUTPUT_FILE} was not modified on the server since the last download, but the flag"
+	    echo "'force_processing_even_if_xml_unchanged' is enabled, so will process the previously downloaded data..."
+
+	fi
 fi
 
+# this assumes that in force mode, the unzipped file contents are still there.
+if [ ! "$force_processing_even_if_xml_unchanged" ]; then
+	unzip -o "$OUTPUT_FILE"
+fi
+
+# this checks that the unzipped file contents are actually there as expected
+if [ ! -f "$UNZIPPED_FILE" ]; then
+	    echo
+	    echo
+		echo "I am expecting the file ${UNZIPPED_FILE} to exist at this point, but it doesn't. Exiting."	
+		echo "Perhaps delete ${OUTPUT_FILE} and run me again to force a redownload of the zip file from the webserver."
+	    echo
+	    echo
+		exit 1
+fi
 
 # we always delete the old generated data dir before generating it all again
 if [ -d "${generated_data_dir}" ]; then
 	rm -rf "${generated_data_dir}"
 fi
 
-
 mkdir -p "${generated_data_dir}"
-unzip -o "$OUTPUT_FILE"
 
 echo
 echo
 echo "Converting the XML to JSON..."
 
+# Could pass in ${UNZIPPED_FILE} to the script here. In another life maybe.
 python convertXMLtoJSON.py > ${methods_processed}
 
 # We filter out false methods.
@@ -128,6 +163,7 @@ done
 
 echo
 echo
-echo Finished.
+echo "Finished."
+echo
 echo
 

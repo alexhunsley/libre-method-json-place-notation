@@ -4,6 +4,7 @@ import sys
 
 #
 # Libre Method by Alex Hunsley 2023
+# https://github.com/alexhunsley/libre-method-data-dump
 #
 
 # GPT produced code for xml -> json while ensuring certain nodes are ALWAYS represented as 'attribute mode',
@@ -54,7 +55,7 @@ def ensure_text_dict(item, tags_to_fix):
         return [ensure_text_dict(i, tags_to_fix) for i in item]
     return item
 
-xml_file = "../allmeths.xml"
+xml_file = "allmeths.xml"
 
 with open(xml_file, 'r') as file:
     data = xmltodict.parse(file.read(), force_list=('method'))
