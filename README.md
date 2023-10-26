@@ -41,6 +41,8 @@ To get a copy of the data (generated 2023-10-25) without having to run any scrip
 
 # How to run the script
 
+I run this tool on Mac OS; instructions may vary on other operating systems.
+
 You will need:
 
 * Bash
