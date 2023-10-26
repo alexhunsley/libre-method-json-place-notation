@@ -35,7 +35,9 @@ These variants have only four bits of information per method:
 
 Please note that the script filters out all false methods. If you'd like to keep those, please see the comment in `process.sh` on how to do that.
 
-CSV data note: The order of fields in the CSV will not change; any new fields would appear at the end.
+CSV data note: The order of fields in the CSV will not change over time; any new fields in the source data would appear after the existing fields.
+
+The identity field in the data comes from Tony Smith's database, and its use is recommended over concocting your own identity.
 
 # I just want the data!
 
