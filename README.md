@@ -37,7 +37,7 @@ Please note that the script filters out all false methods. If you'd like to keep
 
 # I just want the data!
 
-To get a copy of the data (generated 2023-10-25), please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
+To get a copy of the data (generated 2023-10-25) without having to run any scripts, please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
 
 # How to run the script
 
