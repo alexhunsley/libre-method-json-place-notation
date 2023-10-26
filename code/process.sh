@@ -27,23 +27,18 @@ if [ ! -d ${cached_files_dir} ]; then
 	mkdir -p "${cached_files_dir}"
 fi
 
-
-if [ -d ${working_files_dir} ]; then
-	rm -rf "${working_files_dir}"
-fi
-mkdir -p "${working_files_dir}"
-
 generated_data_dir="generated_data"
 
 URL="http://www.methods.org.uk/method-collections/xml-zip-files/allmeths-xml.zip"
-OUTPUT_FILE=$(cached_dir_file_path "allmeths-xml.zip")
-UNZIPPED_FILE=$(working_dir_file_path "allmeths.xml")
 
-echo "OUTPUT_FILE: ${OUTPUT_FILE}"
+ZIP_FILE=$(cached_dir_file_path "allmeths-xml.zip")
+UNZIPPED_FILE_DIR="${cached_files_dir}"
+UNZIPPED_FILE=$(cached_dir_file_path "allmeths.xml")
+
 echo "UNZIPPED_FILE: ${UNZIPPED_FILE}"
 
 # curl -z flag doesn't re-download it if the local file has same date as server file
-HTTP_STATUS=$(curl -z "$OUTPUT_FILE" -o "$OUTPUT_FILE" -w "%{http_code}" "$URL")
+HTTP_STATUS=$(curl -z "$ZIP_FILE" -o "$ZIP_FILE" -w "%{http_code}" "$URL")
 
 methods_processed=$(working_dir_file_path "methods_processed.json")
 methods_processed_non_false=$(working_dir_file_path "methods_processed_non_false.json")
@@ -57,7 +52,7 @@ if [ "$HTTP_STATUS" == "304" ]; then
 	if [ ! "$force_processing_even_if_xml_unchanged" ]; then
 	    echo
 	    echo
-	    echo "${OUTPUT_FILE} was not modified on the server since the last download, so I'm stopping."
+	    echo "${ZIP_FILE} was not modified on the server since the last download, so I'm stopping."
 	    echo
 	    echo "If you want to force processing again regardless, please uncomment this line in the script:"
 	    echo 
@@ -71,19 +66,24 @@ if [ "$HTTP_STATUS" == "304" ]; then
 		# don't exit early if we want to forcing re-processing
 	    echo
 	    echo
-	    echo "${OUTPUT_FILE} was not modified on the server since the last download, but the flag"
+	    echo "${ZIP_FILE} was not modified on the server since the last download, but the flag"
 	    echo "'force_processing_even_if_xml_unchanged' is enabled, so I will process the previously downloaded data..."
 	    echo
 	    echo
 	fi
 fi
 
+if [ -d ${working_files_dir} ]; then
+	rm -rf "${working_files_dir}"
+fi
+mkdir -p "${working_files_dir}"
+
 # in force mode, we tend to assume the unzipped file contents are still there, but if not, we unzip again.
 if [ ! -f "$UNZIPPED_FILE" ] || [ ! "$force_processing_even_if_xml_unchanged" ]; then
 	echo
-	echo "Unzipping ${OUTPUT_FILE}:"
+	echo "Unzipping ${ZIP_FILE}:"
 	echo
-	unzip -o "${OUTPUT_FILE}" -d "${working_files_dir}"
+	unzip -o "${ZIP_FILE}" -d "${UNZIPPED_FILE_DIR}"
 	echo
 	echo
 fi
@@ -210,6 +210,8 @@ do
 	 	@csv' ${simple_non_false_filename} > ${simple_non_false_csv_filename}
 
 done
+
+rm -rf "${working_files_dir}"
 
 echo
 echo

@@ -56,7 +56,7 @@ def ensure_text_dict(item, tags_to_fix):
         return [ensure_text_dict(i, tags_to_fix) for i in item]
     return item
 
-xml_input_file = os.path.join("working_files", "allmeths.xml")
+xml_input_file = os.path.join("cached_files", "allmeths.xml")
 json_output_file = os.path.join("working_files", "methods_processed.json")
 
 with open(xml_input_file, 'r') as file:
