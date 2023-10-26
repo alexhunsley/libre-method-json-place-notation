@@ -17,8 +17,6 @@ mkdir -p "${generated_data_zipped_dir}"
 cp readme.txt ${generated_data_dir}
 
 pushd "${generated_data_dir}"
-pwd
-ls readme.txt
 
 for file in *.csv *.json
 do
