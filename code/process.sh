@@ -18,7 +18,7 @@ methods_processed="methods_processed.json"
 methods_processed_non_false="methods_processed_non_false.json"
 
 # uncomment this line to force processing even if the xml zip hasn't changed on webserver
-force_processing_even_if_xml_unchanged=y
+# force_processing_even_if_xml_unchanged=y
 
 #
 # Note that enabling flag this will assume the unzipped version of the file is still on disk
@@ -89,7 +89,7 @@ echo
 
 all_stages="all"
 
-for stage in ${all_found_stages} ${all_stages}
+for stage in 4 # ${all_found_stages} ${all_stages}
 do
 	echo
 	echo "Processing stage" ${stage}
