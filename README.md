@@ -35,6 +35,8 @@ These variants have only four bits of information per method:
 
 Please note that the script filters out all false methods. If you'd like to keep those, please see the comment in `process.sh` on how to do that.
 
+CSV data note: The order of fields in the CSV will not change; any new fields would appear at the end.
+
 # I just want the data!
 
 To get a copy of the data (generated 2023-10-25) without having to run any scripts, please visit the sister repo [libre-method-data-dump](https://github.com/alexhunsley/libre-method-data-dump).
