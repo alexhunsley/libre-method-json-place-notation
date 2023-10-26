@@ -5,29 +5,55 @@
 # https://github.com/alexhunsley/libre-method-json-place-notation
 #
 
-URL="http://www.methods.org.uk/method-collections/xml-zip-files/allmeths-xml.zip"
-OUTPUT_FILE="allmeths-xml.zip"
-UNZIPPED_FILE="allmeths.xml"
 
-# curl -z flag doesn't re-download it if the local file has same date as server file
-HTTP_STATUS=$(curl -z "$OUTPUT_FILE" -O -w "%{http_code}" "$URL")
+working_files_dir="working_files"
+cached_files_dir="cached_files"
+
+working_dir_file_path() {
+    
+    local filename="$1"
+    
+    echo "${working_files_dir%/}/${filename}"
+}
+
+cached_dir_file_path() {
+    
+    local filename="$1"
+    
+    echo "${cached_files_dir%/}/${filename}"
+}
+
+if [ ! -d ${cached_files_dir} ]; then
+	mkdir -p "${cached_files_dir}"
+fi
+
+
+if [ -d ${working_files_dir} ]; then
+	rm -rf "${working_files_dir}"
+fi
+mkdir -p "${working_files_dir}"
 
 generated_data_dir="generated_data"
 
-methods_processed="methods_processed.json"
-methods_processed_non_false="methods_processed_non_false.json"
+URL="http://www.methods.org.uk/method-collections/xml-zip-files/allmeths-xml.zip"
+OUTPUT_FILE=$(cached_dir_file_path "allmeths-xml.zip")
+UNZIPPED_FILE=$(working_dir_file_path "allmeths.xml")
+
+echo "OUTPUT_FILE: ${OUTPUT_FILE}"
+echo "UNZIPPED_FILE: ${UNZIPPED_FILE}"
+
+# curl -z flag doesn't re-download it if the local file has same date as server file
+HTTP_STATUS=$(curl -z "$OUTPUT_FILE" -o "$OUTPUT_FILE" -w "%{http_code}" "$URL")
+
+methods_processed=$(working_dir_file_path "methods_processed.json")
+methods_processed_non_false=$(working_dir_file_path "methods_processed_non_false.json")
 
 # uncomment this line to force processing even if the xml zip hasn't changed on webserver
 # force_processing_even_if_xml_unchanged=y
 
-#
-# Note that enabling flag this will assume the unzipped version of the file is still on disk
-# and not do any unzipping!
-
 # do we already have the latest zip?
 if [ "$HTTP_STATUS" == "304" ]; then
 	
-	# don't exit early if we want to forcing re-processing
 	if [ ! "$force_processing_even_if_xml_unchanged" ]; then
 	    echo
 	    echo
@@ -42,10 +68,11 @@ if [ "$HTTP_STATUS" == "304" ]; then
 	    echo
 	    exit 0
 	else
+		# don't exit early if we want to forcing re-processing
 	    echo
 	    echo
 	    echo "${OUTPUT_FILE} was not modified on the server since the last download, but the flag"
-	    echo "'force_processing_even_if_xml_unchanged' is enabled, so will process the previously downloaded data..."
+	    echo "'force_processing_even_if_xml_unchanged' is enabled, so I will process the previously downloaded data..."
 	    echo
 	    echo
 	fi
@@ -56,7 +83,7 @@ if [ ! -f "$UNZIPPED_FILE" ] || [ ! "$force_processing_even_if_xml_unchanged" ];
 	echo
 	echo "Unzipping ${OUTPUT_FILE}:"
 	echo
-	unzip -o "$OUTPUT_FILE"
+	unzip -o "${OUTPUT_FILE}" -d "${working_files_dir}"
 	echo
 	echo
 fi

@@ -1,6 +1,7 @@
 import xmltodict
 import json
 import sys
+import os
 
 #
 # Libre Method by Alex Hunsley 2023
@@ -55,14 +56,14 @@ def ensure_text_dict(item, tags_to_fix):
         return [ensure_text_dict(i, tags_to_fix) for i in item]
     return item
 
-xml_file = "allmeths.xml"
+xml_input_file = os.path.join("working_files", "allmeths.xml")
+json_output_file = os.path.join("working_files", "methods_processed.json")
 
-with open(xml_file, 'r') as file:
+with open(xml_input_file, 'r') as file:
     data = xmltodict.parse(file.read(), force_list=('method'))
     data = ensure_text_dict(data, tags_to_fix="classification")
   
     result_json = json.dumps(data, indent=4)
 
-    with open("methods_processed.json", "w") as text_file:
+    with open(json_output_file, "w") as text_file:
         text_file.write(result_json)
-
