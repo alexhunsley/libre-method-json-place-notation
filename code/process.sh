@@ -106,15 +106,30 @@ do
 	simple_non_false_filename=${generated_data_dir}/simple-stage-${stage_padded}.json
 	simple_non_false_csv_filename=${generated_data_dir}/simple-stage-${stage_padded}.csv
 
+	# any supplement
+	supplement_path="../../libre-method-supplement/supplement.json"
+	simple_supplement_path="../../libre-method-supplement/simple_supplement.json"
+
+	supplement_json_content="[]"
+	simple_supplement_json_content="[]"
+
+	if [ "$stage" == "8" ]; then
+		if [ -f ${supplement_path} ]; then
+			supplement_json_content=`cat ${supplement_path}`
+		fi
+
+		if [ -f ${simple_supplement_path} ]; then
+			simple_supplement_json_content=`cat ${simple_supplement_path}`
+		fi
+	fi
+
 	##############################################
 	# full data export
-	
-	jq --arg stg "$stage" '[
+	jq --arg stg "$stage" --argjson supplement_json "$supplement_json_content" '[
 	  .collection.methodSet[] |
-	  select($stg == "all" or .properties.stage == $stg) |
+	  select($stg == "all" or .properties.stage == $stg)
       .properties as $methodSetProperties |
-	  .method[] |
-	  { 
+	  .method[] | { 
   	    "id": (.["@id"] // $methodSetProperties["@id"]), 
 	    "stage": (.stage // $methodSetProperties.stage),
 	    "name": (.name // $methodSetProperties.name), 
@@ -130,11 +145,12 @@ do
 	    "classification_little": .classification."@little",
 	    "classification_differential": .classification."@differential",
 	    "classification_plain": .classification."@plain"
-	  } | with_entries(select(.value != null))
-	  ]' ${methods_processed_non_false} > ${non_false_filename}
+	  } |
+	  with_entries(select(.value != null))
+	  ] + $supplement_json' ${methods_processed_non_false} > ${non_false_filename}
 
 	# json to CSV
-	# we have a set order for the CSV data columns, in order to add any new columns in an orderly fashion in future
+	# we have a set order for the CSV data columns, in order to add any new columns in an orderly fashion in future.
 	jq -r '[
 		"id", "stage", "name", "title", "notation", "leadHead", "leadHeadCode", "lengthOfLead", "symmetry", "numberOfHunts", "huntbellPath", "classification_text", "classification_little", "classification_differential", "classification_plain"] as $cols |
 	 	map(. as $row | $cols | map($row[.])) as $rows |
@@ -143,7 +159,7 @@ do
 
 	##############################################
 	# simple data export (only crucial fields)
-	jq --arg stg "$stage" '[
+	jq --arg stg "$stage" --argjson simple_supplement_json "$simple_supplement_json_content" '[
 	  .collection.methodSet[] |
 	  select($stg == "all" or .properties.stage == $stg) |
       .properties as $methodSetProperties |
@@ -155,7 +171,7 @@ do
 	    "title": (.title // $methodSetProperties.title), 
 	    "notation": (.notation // $methodSetProperties.notation),
 	  } | with_entries(select(.value != null))
-	  ]' ${methods_processed_non_false} > ${simple_non_false_filename}
+	  ] + $simple_supplement_json' ${methods_processed_non_false} > ${simple_non_false_filename}
 
 	# json to CSV
 	# we have a set order for the CSV data columns, in order to add any new columns in an orderly fashion in future.
