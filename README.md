@@ -73,4 +73,4 @@ That's what Libre Method aims to provide: very simple flat structures (basically
 
 # Thanks
 
-Thanks go to Tony Smith and the authors of the lovely `jq` tool.
+Thanks go to Tony Smith and the authors of the lovely [jq](https://github.com/jqlang/jq) tool.
