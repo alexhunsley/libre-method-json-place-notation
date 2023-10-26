@@ -46,24 +46,19 @@ if [ "$HTTP_STATUS" == "304" ]; then
 	    echo
 	    echo "${OUTPUT_FILE} was not modified on the server since the last download, but the flag"
 	    echo "'force_processing_even_if_xml_unchanged' is enabled, so will process the previously downloaded data..."
-
+	    echo
+	    echo
 	fi
 fi
 
-# this assumes that in force mode, the unzipped file contents are still there.
-if [ ! "$force_processing_even_if_xml_unchanged" ]; then
+# in force mode, we tend to assume the unzipped file contents are still there, but if not, we unzip again.
+if [ ! -f "$UNZIPPED_FILE" ] || [ ! "$force_processing_even_if_xml_unchanged" ]; then
+	echo
+	echo "Unzipping ${OUTPUT_FILE}:"
+	echo
 	unzip -o "$OUTPUT_FILE"
-fi
-
-# this checks that the unzipped file contents are actually there as expected
-if [ ! -f "$UNZIPPED_FILE" ]; then
-	    echo
-	    echo
-		echo "I am expecting the file ${UNZIPPED_FILE} to exist at this point, but it doesn't. Exiting."	
-		echo "Perhaps delete ${OUTPUT_FILE} and run me again to force a redownload of the zip file from the webserver."
-	    echo
-	    echo
-		exit 1
+	echo
+	echo
 fi
 
 # we always delete the old generated data dir before generating it all again
