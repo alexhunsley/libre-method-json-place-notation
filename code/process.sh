@@ -72,7 +72,7 @@ echo
 echo
 echo "Converting the XML to JSON..."
 
-# Could pass in ${UNZIPPED_FILE} to the script here. In another life maybe.
+# Could pass in ${UNZIPPED_FILE} filename to the script here. In another life maybe.
 python convertXMLtoJSON.py > ${methods_processed}
 
 # We filter out false methods.
@@ -89,7 +89,7 @@ echo
 
 all_stages="all"
 
-for stage in 4 # ${all_found_stages} ${all_stages}
+for stage in ${all_found_stages} ${all_stages}
 do
 	echo
 	echo "Processing stage" ${stage}
@@ -116,16 +116,16 @@ do
 	  .method[] |
 	  { 
   	    "id": (.["@id"] // $methodSetProperties["@id"]), 
+	    "stage": (.stage // $methodSetProperties.stage),
 	    "name": (.name // $methodSetProperties.name), 
 	    "title": (.title // $methodSetProperties.title), 
 	    "notation": (.notation // $methodSetProperties.notation),
+	    "leadHead": (.leadHead // $methodSetProperties.leadHead),
+	    "leadHeadCode": (.leadHeadCode // $methodSetProperties.leadHeadCode),
 	    "lengthOfLead": (.lengthOfLead // $methodSetProperties.lengthOfLead),
+	    "symmetry": (.symmetry // $methodSetProperties.symmetry),
 	    "numberOfHunts": (.numberOfHunts // $methodSetProperties.numberOfHunts),
 	    "huntbellPath": (.huntbellPath // $methodSetProperties.huntbellPath), 
-	    "leadHeadCode": (.leadHeadCode // $methodSetProperties.leadHeadCode),
-	    "leadHead": (.leadHead // $methodSetProperties.leadHead),
-	    "stage": (.stage // $methodSetProperties.stage),
-	    "symmetry": (.symmetry // $methodSetProperties.symmetry),
 	    "classification_text": .classification."#text",
 	    "classification_little": .classification."@little",
 	    "classification_differential": .classification."@differential",
@@ -134,7 +134,12 @@ do
 	  ]' ${methods_processed_non_false} > ${non_false_filename}
 
 	# json to CSV
-	jq -r '(map(keys) | add | unique) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' ${non_false_filename} > ${non_false_csv_filename}
+	# we have a set order for the CSV data columns, in order to add any new columns in an orderly fashion in future
+	jq -r '[
+		"id", "stage", "name", "title", "notation", "leadHead", "leadHeadCode", "lengthOfLead", "symmetry", "numberOfHunts", "huntbellPath", "classification_text", "classification_little", "classification_differential", "classification_plain"] as $cols |
+	 	map(. as $row | $cols | map($row[.])) as $rows |
+	 	$cols, $rows[] |
+	 	@csv' ${non_false_filename} > ${non_false_csv_filename}
 
 	##############################################
 	# simple data export (only crucial fields)
@@ -144,15 +149,22 @@ do
       .properties as $methodSetProperties |
 	  .method[] |
 	  { 
+  	    "id": (.["@id"] // $methodSetProperties["@id"]),
+	    "stage": (.stage // $methodSetProperties.stage),
 	    "name": (.name // $methodSetProperties.name), 
 	    "title": (.title // $methodSetProperties.title), 
 	    "notation": (.notation // $methodSetProperties.notation),
-	    "stage": (.stage // $methodSetProperties.stage)
 	  } | with_entries(select(.value != null))
 	  ]' ${methods_processed_non_false} > ${simple_non_false_filename}
 
 	# json to CSV
-	jq -r '(map(keys) | add | unique) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' ${simple_non_false_filename} > ${simple_non_false_csv_filename}
+	# we have a set order for the CSV data columns, in order to add any new columns in an orderly fashion in future.
+	# The position of items here must match the same items in the non-simple CSV generation further above.
+	jq -r '[
+		"id", "stage", "name", "title", "notation"] as $cols |
+	 	map(. as $row | $cols | map($row[.])) as $rows |
+	 	$cols, $rows[] |
+	 	@csv' ${simple_non_false_filename} > ${simple_non_false_csv_filename}
 
 done
 
